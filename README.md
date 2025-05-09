@@ -45,6 +45,3 @@ If you use this work, please cite as follows :
 }
 <<<<<<< HEAD
 ```
-=======
-```
->>>>>>> 95729f6941ac92f2d1211ea9739d8888b9e58b6f
