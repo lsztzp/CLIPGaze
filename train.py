@@ -22,6 +22,7 @@ from torch.utils.tensorboard import SummaryWriter
 import pickle
 
 
+
 def train(epoch, args, model, SlowOpt, MidOpt, FastOpt, loss_fn_token, loss_fn_y, loss_fn_x, loss_fn_t, train_dataloader, model_dir, model_name, device = 'cuda:0', im_h=20, im_w=32, project_num=16):
     model.train()
     token_losses = 0

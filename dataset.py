@@ -8,6 +8,7 @@ from torchvision import transforms
 from PIL import Image
 
 
+
 class fixation_dataset(Dataset):
     def __init__(self, fixs, img_ftrs_dir):
         self.fixs = fixs

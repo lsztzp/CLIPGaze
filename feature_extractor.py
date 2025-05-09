@@ -8,6 +8,7 @@ import math
 from os.path import join, isfile
 import torch
 
+
 def rescaled_pos_emb(model,new_size,token_shape=(14,14)):
     assert len(new_size) == 2
 

@@ -60,6 +60,7 @@ def get_args_parser_test():
     parser.add_argument('--num_samples', default=1, type=int, help="Number of scanpaths sampled per test case")
 
     return parser
+    
 
 def get_args_parser_train():
     parser = argparse.ArgumentParser('Gaze Transformer Trainer', add_help=False)

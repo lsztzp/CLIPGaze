@@ -3,6 +3,7 @@ import torch.nn.functional as F
 from torch import nn, Tensor
 from positional_encodings import PositionEmbeddingSine2d
 
+
 class CLIPGaze(nn.Module):
     def __init__(self, transformer, spatial_dim, dropout=0.2, max_len = 7, project_num  = 16, device = "cuda:0"):
         super(CLIPGaze, self).__init__()
