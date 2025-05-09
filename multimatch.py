@@ -476,12 +476,12 @@ def createdirectedgraph(szM,
     :param: M: array-like, matrix of vector length differences
     :param: M_assignment: array-like, Matrix, arranged with values from 0 to number of entries in M
 
-    :return: weighted graph: dict, Dictionary within a dictionary pairing weights (distances) with
+    :return: weighted graph: dict, Dictionary within a dictionary pairing checkpoint (distances) with
             node-pairings
 
     """
 
-    # initialize dictionary for neighbouring vertices and edge weights
+    # initialize dictionary for neighbouring vertices and edge checkpoint
     adjacent = {}
     weight = {}
     # loop through every node rowwise
@@ -513,9 +513,9 @@ def createdirectedgraph(szM,
     #  will be the first key in the nested dict
     Startnodes = range(0, szM[0] * szM[1])
     # initialize list with adjacent nodes (adjacent to each startnode)
-    # and the weights associated with the paths between them
+    # and the checkpoint associated with the paths between them
     weightedEdges = []
-    # zip Nodes and weights
+    # zip Nodes and checkpoint
     for i in range(0, len(adjacent)):
         weightedEdges.append(list(zip(list(adjacent.values())[i],
                                       list(weight.values())[i])))
@@ -535,13 +535,13 @@ def dijkstra(weightedGraph,
     Use the dijkstra algorithm to find the shortest path through a directed
     graph (weightedGraph) from start to end.
 
-    :param: weightedGraph: dict, dictionary within a dictionary pairing weights (distances) with
+    :param: weightedGraph: dict, dictionary within a dictionary pairing checkpoint (distances) with
         node-pairings
     :param: start: int, starting point of path, should be 0
     :param: end: int, end point of path, should be (n, m) of Matrix M
 
     :return: path: array-like, array of indices of the shortest path, i.e. best-fitting saccade pairs
-    :return: dist: float, sum of weights
+    :return: dist: float, sum of checkpoint
 
     """
 
@@ -556,7 +556,7 @@ def dijkstra(weightedGraph,
         dist[node] = float('inf')
         # no node has any predecessors yet
         pred[node] = None
-    # initialize list to be filled with final distances(weights) of nodes
+    # initialize list to be filled with final distances(checkpoint) of nodes
     sp_set = []
     # the starting node gets a weight of 0 to make sure to start there
     dist[start] = 0
@@ -893,14 +893,14 @@ def docomparison(fixation_vectors1,
             # simplify the data
             subj1 = simplify_scanpath(subj1, TAmp, TDir, TDur)
             subj2 = simplify_scanpath(subj2, TAmp, TDir, TDur)
-        # create M, a matrix of all vector pairings length differences (weights)
+        # create M, a matrix of all vector pairings length differences (checkpoint)
         M = cal_vectordifferences(subj1, subj2)
         # initialize a matrix of size M for a matrix of nodes
         szM = np.shape(M)
         M_assignment = np.arange(szM[0] * szM[1]).reshape(szM[0], szM[1])
         # create a weighted graph of all possible connections per Node, and their weight
         weightedGraph = createdirectedgraph(szM, M, M_assignment)
-        # find the shortest path (= lowest sum of weights) through the graph
+        # find the shortest path (= lowest sum of checkpoint) through the graph
         path, dist = dijkstra(weightedGraph, 0, szM[0] * szM[1] - 1)
         # compute similarities on alinged scanpaths and normalize them
         unnormalised = getunnormalised(subj1, subj2, path, M_assignment)

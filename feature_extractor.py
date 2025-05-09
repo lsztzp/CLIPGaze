@@ -175,8 +175,8 @@ def get_text_embedding(dataset_path, save_path, model):
 
 if __name__=="__main__":
     import clip
-    dataset_path='/data/lyt/01-Datasets/01-ScanPath-Datasets/coco_search18/raw/COCOSearch18/'
-    save_path='/data/lyt/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/'
+    dataset_path='/01-Datasets/01-ScanPath-Datasets/coco_search18/raw/COCOSearch18/'
+    save_path='/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/'
 
     device = "cpu"
     version = "ViT-L/14@336px"

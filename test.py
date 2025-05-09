@@ -105,6 +105,7 @@ def test(args):
 
     mm = compute_mm(test_target_trajs, predictions, 512, 320)
     mm = mm[:-1].mean()
+
     print("Calculating cc,nss...")
     cc, nss = compute_spatial_metrics_by_step(predictions, test_target_trajs)
 
@@ -114,6 +115,7 @@ def main(args):
     seed_everything(args.seed)
     seq_score, FED, SemSS, SemFED, mm, cc, nss = test(args)
     print('Sequence Score : {:.3f}, FED : {:.3f}'.format(seq_score, FED))
+    print(seq_score, FED, SemSS, SemFED, mm, cc, nss)
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Gaze Transformer Test', parents=[get_args_parser_test()])

@@ -36,9 +36,9 @@ def fixations2seq(fixations, max_len):
 def get_args_parser_test():
     parser = argparse.ArgumentParser('Gaze Transformer Tester', add_help=False)
     parser.add_argument('--dataset_dir', default='./dataset', type=str, help="Dataset Directory")
-    parser.add_argument('--img_ftrs_dir', default='/data/lyt/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/featuremaps/',
+    parser.add_argument('--img_ftrs_dir', default='/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/featuremaps/',
                         type=str, help="Directory of precomputed target present CLIP visual features")
-    parser.add_argument('--img_ftrs_dir_absent', default='/data/lyt/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/featuremaps_TA/',
+    parser.add_argument('--img_ftrs_dir_absent', default='/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/featuremaps_TA/',
                         type=str, help="Directory of precomputed target absent CLIP visual features")
     parser.add_argument("--embedding_dir", default="./dataset/embeddings.npy",
                         type=str, help="embedding_dir")
@@ -50,7 +50,7 @@ def get_args_parser_test():
     parser.add_argument('--num_decoder', default=6, type=int, help="Number of transformer decoder layers")
     parser.add_argument('--hidden_dim', default=1024, type=int, help="Hidden dimensionality of transformer layers")
     parser.add_argument('--nhead', default=8, type=int, help="Number of heads for transformer attention layers")
-    parser.add_argument('--trained_model', default='./checkpoint/best_performance_tp.pkg', type=str,
+    parser.add_argument('--trained_model', default='./checkpoint/CLIPGaze_TP.pkg', type=str,
                         help="Trained model checkpoint to run for inference")
     parser.add_argument('--seed', default=3407, type=int, help="Seed")
     parser.add_argument('--cuda', default=0, type=int, help="CUDA core to load models and data")
@@ -72,9 +72,9 @@ def get_args_parser_train():
     parser.add_argument('--train_file', default='coco_search18_fixations_TP_train.json', type=str, help="Training fixation file")
     parser.add_argument('--train_file_absent', default='coco_search18_fixations_TA_train.json', type=str, help="Training fixation file")
     parser.add_argument('--bbox_file', default='./dataset/bbox_annos.npy', type=str, help="Training fixation file")
-    parser.add_argument('--img_ftrs_dir', default='/data/lyt/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/featuremaps/',
+    parser.add_argument('--img_ftrs_dir', default='/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/featuremaps/',
                         type=str, help="Directory of precomputed target present CLIP features")
-    parser.add_argument('--img_ftrs_dir_absent', default='/data/lyt/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/featuremaps_TA/',
+    parser.add_argument('--img_ftrs_dir_absent', default='/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/featuremaps_TA/',
                         type=str, help="Directory of precomputed target absent CLIP features")
     parser.add_argument("--embedding_dir", default="./dataset/embeddings.npy",
                         type=str, help="embedding_dir")

@@ -176,7 +176,7 @@ def main(args):
         args.work_dir = args.reload_path
         args.cuda = device_id
     else:
-        args.work_dir = os.path.join('/data/lyt/02-Results/01-ScanPath/logs/gazeformer/',
+        args.work_dir = os.path.join('/02-Results/01-ScanPath/logs/gazeformer/',
                                      datetime.today().strftime('%m-%d-') + args.work_dir)
     writer = SummaryWriter(log_dir=args.work_dir)
     logfile = join(args.work_dir, 'output.txt')
