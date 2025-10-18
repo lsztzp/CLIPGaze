@@ -43,5 +43,4 @@ If you use this work, please cite as follows :
   year={2025},
   organization={IEEE}
 }
-<<<<<<< HEAD
 ```
