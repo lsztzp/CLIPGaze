@@ -1,19 +1,38 @@
+import torch
+from PIL import Image
+import requests
+import matplotlib.pyplot as plt
+import torch
+import requests
+from PIL import Image
+from torchvision import transforms
+from matplotlib import pyplot as plt
+import torchvision.transforms as T
+import torch
 import torch.nn.functional as F
+from torch import nn, Tensor
 from PIL import Image
 import os
-from os.path import isdir
+from os.path import join, isdir, isfile
 import numpy as np
+import argparse
 from torchvision import transforms
+
 import math
-from os.path import join, isfile
+from os.path import basename, dirname, join, isfile
 import torch
+from torch import nn
+from torch.nn import functional as nnf
+from torch.nn.modules.activation import ReLU
 
 
 def rescaled_pos_emb(model,new_size,token_shape=(14,14)):
     assert len(new_size) == 2
 
-    a = model.positional_embedding[1:].T.view(1, 768, * token_shape)
-    b = F.interpolate(a, new_size, mode='bicubic', align_corners=False).squeeze(0).view(768, new_size[0] * new_size[1]).T
+    a = model.positional_embedding[1:].T.view(1, 1024, * token_shape) #used for ViT-B/14-336px
+    b = F.interpolate(a, new_size, mode='bicubic', align_corners=False).squeeze(0).view(1024, new_size[0] * new_size[1]).T #linear inplot
+    # a = model.positional_embedding[1:].T.view(1, 768, * token_shape) #used for ViT-B/16
+    # b = F.interpolate(a, new_size, mode='bicubic', align_corners=False).squeeze(0).view(768, new_size[0] * new_size[1]).T
     return torch.cat([model.positional_embedding[:1], b])
 
 def forward_multihead_attention(x, b, with_aff=False, attn_mask=None):
@@ -69,7 +88,8 @@ def forward_multihead_attention(x, b, with_aff=False, attn_mask=None):
 
 def visual_forward(model, x_inp, extract_layers=(), skip=False, mask=None,token_shape=(14,14)):
     with torch.no_grad():
-        # inp_size = x_inp.shape[2:]
+        inp_size = x_inp.shape[2:]
+
         x = model.conv1(x_inp)  # shape = [*, width, grid, grid]
 
         x = x.reshape(x.shape[0], x.shape[1], -1)  # shape = [*, width, grid ** 2]
@@ -82,7 +102,7 @@ def visual_forward(model, x_inp, extract_layers=(), skip=False, mask=None,token_
         standard_n_tokens = 50 if model.conv1.kernel_size[0] == 32 else 197
 
         if x.shape[1] != standard_n_tokens:
-            new_shape = (20, 32)
+            new_shape = (20, 32) #To get the same grid size as Gazeformer (baseline)
             x = x + rescaled_pos_emb(model,(new_shape[0], new_shape[1]),token_shape=token_shape).to(x.dtype)[None, :, :]
         else:
             x = x + model.positional_embedding.to(x.dtype)
@@ -129,7 +149,8 @@ def get_image_embedding(dataset_path, save_path, model, clip_model, device='cuda
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        transforms.Resize((320, 512)),
+        transforms.Resize((280, 448)), #ViT-B14@336px 
+        # transforms.Resize((320, 512)), #ViT-B16
     ])
 
     src_path = join(dataset_path, 'images/')
@@ -152,7 +173,8 @@ def get_image_embedding(dataset_path, save_path, model, clip_model, device='cuda
             image_ftrs = transform(PIL_image).unsqueeze(0)
 
             with torch.no_grad():
-                visual_q, activations, _ = visual_forward(model, image_ftrs, extract_layers=[3,6,9])
+                visual_q, activations, _ = visual_forward(model, image_ftrs, extract_layers=[6,12,18], token_shape=token_shape) #TP
+                # visual_q, activations, _ = visual_forward(model, image_ftrs, extract_layers=[3,6,9]) #TA
 
                 activations = [x.permute(1,0,2) for x in activations]
                 torch.save(activations, join(target_path, '_'.join(folder.split(' ')), f.replace('jpg', 'pth')))
@@ -163,25 +185,28 @@ def get_text_embedding(dataset_path, save_path, model):
     tasks = [' '.join(i.split('_')) for i in os.listdir(src_path) if isdir(join(src_path, i))]
     embed_dict = {}
     for task in tasks:
-        # task_promt = 'a photo of a ' + task
+        # task_promt = 'a photo of a ' + task    #test additional prompt 'a photo of'
         task_promt = task
         print(task_promt)
         text_tokens = clip.tokenize(task_promt)
         cond = model.encode_text(text_tokens)
         embed_dict[task]=cond.squeeze().cpu().detach().numpy()
 
-    with open(join(save_path, 'dataset/embeddings.npy'), 'wb') as f:
+    with open(join(save_path, 'embeddings_a_photo_of.npy'), 'wb') as f:
         np.save(f, embed_dict, allow_pickle=True)
         f.close()
 
+
 if __name__=="__main__":
     import clip
+
     dataset_path='/01-Datasets/01-ScanPath-Datasets/coco_search18/raw/COCOSearch18/'
     save_path='/01-Datasets/01-ScanPath-Datasets/coco_search18/vit-L14-336/'
 
     device = "cpu"
-    version = "ViT-L/14@336px"
+    version = "ViT-L/14@336px" #Used for Traditional-Target Present
     token_shape = {'ViT-B/32': (7, 7), 'ViT-B/16': (14, 14), 'ViT-L/14@336px': (24,24)}[version]
+
     clip_model, _ = clip.load(version, device=device, jit=False)
     model = clip_model.visual
 

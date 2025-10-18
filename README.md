@@ -21,6 +21,8 @@ First Step: Extract the related CLIP visual and textual feature, run the followi
 ```bash
 python feature_extrctor.py
 ```
+Or you can directly download the extracted features from [百度网盘](链接: https://pan.baidu.com/s/1xEdje1LnT8cKq9D9a3rzWg 提取码: gy2q)
+
 To train the model, run the following
 ```bash
 python train.py
