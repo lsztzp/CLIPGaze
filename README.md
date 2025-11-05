@@ -13,7 +13,7 @@ bash install.sh
 # Files to download
 We suggest that you first reproduce [Gazeformer](https://arxiv.org/abs/2303.15274) from this [repository](https://github.com/cvlab-stonybrook/Gazeformer). Here, you can find the training files related to COCO_Search18 (e.g., './dataset/coco_search18_TP_Train.json') and the corresponding test files (e.g., './SemSS/test_TP_Sem.pkl').
 
-You can download the traditional target present model weight from this [link](https://drive.google.com/drive/folders/1CO7OSwEy8dn3xPkexi3ZfcaAOOS_ecpr?usp=sharing).
+You can download the traditional target present and traditional target absent model weight from this [link](https://drive.google.com/drive/folders/1CO7OSwEy8dn3xPkexi3ZfcaAOOS_ecpr?usp=sharing).
 
 # Scripts
 
